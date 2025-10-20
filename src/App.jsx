@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ProductCard from "./components/ProductCard";
 
 // Páginas
 import Home from "./pages/Home";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/carrito" element={<Carrito />} />
         </Routes>
       </main>
+
 
       {/* Footer visible en todas las páginas */}
       <Footer />

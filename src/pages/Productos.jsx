@@ -1,10 +1,8 @@
 import React from 'react'
 
-function Productos() {
+const Productos = () => {
     return (
-        <div>
-
-        </div>
+        <div>Productos</div>
     )
 }
 
