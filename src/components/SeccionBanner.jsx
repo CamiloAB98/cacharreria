@@ -29,8 +29,6 @@ function SeccionBanner() {
                     </div>
                 </div>
             </section>
-
-
         </>
     )
 }

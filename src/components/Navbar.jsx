@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-function Navbar() {
+const Navbar = () => {
     return (
         <nav className="uk-navbar-container uk-navbar" uk-navbar="true">
             <div className="uk-navbar-left">

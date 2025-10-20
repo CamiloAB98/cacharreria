@@ -1,4 +1,4 @@
-function ProductCard({ producto }) {
+const ProductCard = ({producto}) => {
     return (
         <div className="uk-card uk-card-default uk-card-hover uk-card-body uk-text-center">
             <div className="uk-inline-clip uk-transition-toggle" tabIndex="0">

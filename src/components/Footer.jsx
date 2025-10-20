@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-function Footer() {
+const Footer = () => {
     return (
         <footer className="uk-section uk-section-secondary uk-light uk-padding-small uk-text-center">
             <div className="uk-container">

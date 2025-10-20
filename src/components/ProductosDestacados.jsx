@@ -8,9 +8,6 @@ const { productos, loading, error } = useFetchProductos();
 
     return (
         <div>
-            
-            
-            {/*  Sección de Productos Destacados */}
             <section className="uk-section uk-section-muted">
                 <div className="uk-container">
                     <h2 className="uk-heading-bullet uk-text-center">Productos Destacados</h2>

@@ -11,10 +11,8 @@ import Carrito from "./pages/Carrito";
 function App() {
   return (
     <>
-      {/* Navbar visible en todas las páginas */}
       <Navbar />
 
-      {/* Contenedor principal */}
       <main className="uk-container uk-margin-top uk-margin-bottom">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,7 +23,6 @@ function App() {
       </main>
 
 
-      {/* Footer visible en todas las páginas */}
       <Footer />
     </>
   );
