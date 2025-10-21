@@ -1,6 +1,6 @@
 const ProductCard = ({producto}) => {
     return (
-        <div className="uk-card uk-card-default uk-card-hover uk-card-body uk-text-center">
+        <div uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300" className="uk-card uk-card-default uk-card-hover uk-card-body uk-text-center">
             <div className="uk-inline-clip uk-transition-toggle" tabIndex="0">
                 <img
                     src={producto.imagen}
