@@ -22,10 +22,18 @@ const BannerWrapper = styled.section`
     font-size: 1.2rem;
   }
 
+  .uk-button {
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
   .uk-button-default {
     border-color: #ffd700;
     color: #ffd700;
     transition: all 0.3s ease;
+    size: large;
   }
 
   .uk-button-default:hover {

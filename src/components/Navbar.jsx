@@ -40,13 +40,16 @@ padding: 0.5rem 2rem;
 const Navbar = () => {
     return (
         <NavbarContainer data-uk-navbar>
-            <div className="uk-navbar-left">
+            <div uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 100; repeat: false"
+            className="uk-navbar-left">
                 <NavLink to="/" className="uk-navbar-item uk-logo">
                     Mi Cacharrería
                 </NavLink>
             </div>
 
-            <div className="uk-navbar-right uk-visible@m">
+            <div className="uk-navbar-right uk-visible@m"
+            uk-scrollspy="cls: uk-animation-slide-left; target: > *; delay: 100; repeat: false" >
+                
                 <ul className="uk-navbar-nav">
                     <li><NavLink to="/">Inicio</NavLink></li>
                     <li><NavLink to="/productos">Productos</NavLink></li>
