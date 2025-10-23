@@ -1,9 +1,9 @@
 const productos = [
     {
         id: 1,
-        nombre: "Taladro Eléctrico Bosch",
+        nombre: "Casa Muñecas De Gabby Figuras Y Accesorios",
         precio: 250000,
-        imagen: "/assets/images/taladro-bosh.webp",
+        imagen: "/assets/images/casa-gabby-accesorios.webp",
     },
     {
         id: 2,

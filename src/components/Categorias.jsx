@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import useFetchCategorias from "../hooks/useFetchCategorias";
+import { Link } from "react-router-dom";
 
 /* Helpers del theme como funciones CSS */
 const cardBase = ({ theme }) => css`${theme.cardBase(theme)}`;
@@ -121,7 +122,7 @@ const Categorias = () => {
       {/* Header */}
       <HeaderBox>
         <h2>Categorías Destacadas</h2>
-        <HeaderButton aria-label="Ver todas las categorías">Ver todas</HeaderButton>
+        <HeaderButton as={Link} to="/productos" aria-label="Ver todas las categorías">Ver todas</HeaderButton>
       </HeaderBox>
 
       {/* Cards */}

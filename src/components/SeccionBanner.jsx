@@ -6,6 +6,7 @@ const BannerWrapper = styled.section`
   position: relative;
   overflow: hidden;
   background: ${({ theme }) => theme.colors.background};
+  border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg};
 
   /* Overlay con degradado, aprovechando el modo light */
   .uk-overlay-primary {
