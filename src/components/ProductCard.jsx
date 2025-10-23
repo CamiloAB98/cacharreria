@@ -94,7 +94,7 @@ const ProductCard = ({ producto }) => {
             : producto.precio;
 
     return (
-        <Card uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
+        <Card>
             <ImageWrapper>
                 <Image src={producto.imagen} alt={producto.nombre} loading="lazy" />
             </ImageWrapper>

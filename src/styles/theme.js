@@ -39,7 +39,7 @@ export const theme = {
     transition: "all 0.25s ease-in-out",
 
     // ---------- Helpers reutilizables ----------
-    spacing: (n) => `${4 * n}px`, // 4px grid: 8=32px, 12=48px, etc.
+    spacing: (n) => `${4 * n}px`, 
 
     focusRing: (color) => `
     &:focus-visible {
@@ -56,7 +56,6 @@ export const theme = {
     transition: ${t.transition};
   `,
 
-    // contenedor y secciones coherentes
     container: (t) => `
     max-width: ${t.layout.containerMax};
     margin: 0 auto;

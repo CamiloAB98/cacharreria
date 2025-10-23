@@ -55,7 +55,9 @@ const FooterText = styled.p`
 
 const Footer = () => {
   return (
-    <FooterWrapper>
+    <FooterWrapper
+      data-uk-scrollspy="cls: uk-animation-fade; delay: 150; repeat: false"
+    >
       <FooterContainer>
         <FooterNav>
           <li><FooterLink to="/">Términos y Condiciones</FooterLink></li>

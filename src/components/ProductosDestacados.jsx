@@ -25,7 +25,6 @@ const Container = styled.div`
 /* Header superior */
 const HeaderBox = styled.div`
   ${cardBase};
-  /* Degradado suave */
   background: linear-gradient(
     135deg,
     ${({ theme }) => theme.colors.primary} 0%,
@@ -33,9 +32,7 @@ const HeaderBox = styled.div`
   );
   color: ${({ theme }) => theme.colors.textLight};
   border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
-
   padding: ${({ theme }) => `${theme.spacing(8)} ${theme.spacing(4)}`};
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,7 +43,6 @@ const HeaderBox = styled.div`
     font-weight: 700;
     margin: 0;
     letter-spacing: 0.2px;
-    /* text-wrap: balance; */
   }
 `;
 
@@ -83,7 +79,6 @@ const ProductsWrapper = styled.div`
   border-radius: 0 0 ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg};
   padding: ${({ theme }) => `${theme.spacing(12)} ${theme.spacing(4)}`}; 
   margin-top: ${({ theme }) => theme.spacing(0)}; 
-
 `;
 
 const ProductosDestacados = () => {
@@ -93,7 +88,9 @@ const ProductosDestacados = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Section uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
+    <Section
+      data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
+    >
       <Container>
         <HeaderBox>
           <h2>Productos Destacados</h2>
@@ -106,6 +103,7 @@ const ProductosDestacados = () => {
           <div
             className="uk-child-width-1-4@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
             data-uk-grid
+            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 120; repeat: false"
           >
             {productos.slice(0, 4).map((item) => (
               <div key={item.id}>
