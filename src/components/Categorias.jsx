@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import useFetchCategorias from "../hooks/useFetchCategorias";
+import CategoriasCard from "../components/CategoriasCard";
 
 /* Helpers theme */
 const cardBase = ({ theme }) => css`${theme.cardBase(theme)}`;
@@ -11,8 +12,8 @@ const Section = styled.section`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
   transition: ${({ theme }) => theme.transition};
-  margin: ${({ theme }) => `${theme.spacing(12)} 0`};   
-  padding: ${({ theme }) => `${theme.spacing(8)} 0`};   
+  margin: ${({ theme }) => `${theme.spacing(12)} 0`};
+  padding: ${({ theme }) => `${theme.spacing(8)} 0`};
   text-align: center;
 `;
 
@@ -29,20 +30,18 @@ const HeaderBox = styled.div`
   );
   color: ${({ theme }) => theme.colors.textLight};
   border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
-
-  padding: ${({ theme }) => `${theme.spacing(8)} ${theme.spacing(4)}`}; 
+  padding: ${({ theme }) => `${theme.spacing(8)} ${theme.spacing(4)}`};
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing(4)}; 
+  gap: ${({ theme }) => theme.spacing(4)};
 
   h2 {
     font-size: clamp(1.5rem, 2.2vw, 2rem);
     font-weight: 700;
     margin: 0;
     letter-spacing: 0.2px;
-    /* text-wrap: balance; */
   }
 `;
 
@@ -76,51 +75,9 @@ const CategoriesWrapper = styled.div`
   ${cardBase};
   background-color: ${({ theme }) => theme.colors.cardBackground};
   border-radius: 0 0 ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg};
-  padding: ${({ theme }) => `${theme.spacing(12)} ${theme.spacing(4)}`}; 
+  padding: ${({ theme }) => `${theme.spacing(12)} ${theme.spacing(4)}`};
   position: relative;
   z-index: 1;
-`;
-
-const Card = styled.div`
-  ${cardBase};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: ${({ theme }) => `clamp(${theme.spacing(5)}, 2.5vw, ${theme.spacing(8)})`};
-  text-align: center;
-  transition: ${({ theme }) => theme.transition};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.textLight};
-    transform: translateY(-5px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-    &:hover { transform: none; }
-  }
-
-  img {
-    width: 100%;
-    max-width: ${({ theme }) => theme.spacing(50)}; 
-    aspect-ratio: 1 / 1;
-    object-fit: contain;
-    margin-bottom: ${({ theme }) => theme.spacing(4)}; 
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.05));
-    user-select: none;
-    -webkit-user-drag: none;
-  }
-
-  h3 {
-    font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-    font-weight: 600;
-    line-height: 1.2;
-    /* text-wrap: balance; */
-    margin: 0;
-  }
 `;
 
 const Categorias = () => {
@@ -130,7 +87,9 @@ const Categorias = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Section uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
+    <Section
+      data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
+    >
       <Container>
         <HeaderBox>
           <h2>Categorías Destacadas</h2>
@@ -143,13 +102,11 @@ const Categorias = () => {
           <div
             className="uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
             data-uk-grid
+            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 120; repeat: false"
           >
             {categorias.slice(0, 3).map((cat) => (
               <div key={cat.id}>
-                <Card>
-                  <img src={cat.imagen} alt={cat.nombre} loading="lazy" />
-                  <h3>{cat.nombre}</h3>
-                </Card>
+                <CategoriasCard categoria={cat} />
               </div>
             ))}
           </div>

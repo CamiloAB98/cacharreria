@@ -4,6 +4,7 @@ export const theme = {
         secondary: "#8E44AD",
         tertiary: "#0077B6",
         accent: "#FF7B00",
+        pinkAccent: "#FF7BA0",
         surface: "#FFFFFF",
         background: "#F5F7FA",
         backgroundAlt: "#e0e0e0bb",
