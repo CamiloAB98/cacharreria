@@ -1,10 +1,10 @@
+// src/sections/ProductosDestacados.jsx
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import ProductCard from "../components/ProductCard";
 import useFetchProductos from "../hooks/useFetchProductos";
 
-
-/* Helpers del theme como funciones CSS */
+/* Helpers del theme */
 const cardBase = ({ theme }) => css`${theme.cardBase(theme)}`;
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
@@ -17,7 +17,6 @@ const Section = styled.section`
   border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
 `;
 
-/* Header tipo “Meli+” */
 const HeaderBox = styled.div`
   ${cardBase};
   background-color: ${({ theme }) => theme.colors.success};
@@ -39,6 +38,7 @@ const HeaderBox = styled.div`
     font-weight: 700;
     margin: 0;
     letter-spacing: 0.2px;
+    text-wrap: balance;
   }
 `;
 
@@ -66,7 +66,6 @@ const HeaderButton = styled.button`
   }
 `;
 
-/* Fondo diferente para las cards */
 const ProductsWrapper = styled.div`
   ${cardBase};
   background-color: ${({ theme }) => theme.colors.cardBackground};
@@ -77,37 +76,34 @@ const ProductsWrapper = styled.div`
 `;
 
 const ProductosDestacados = () => {
-    const { productos, loading, error } = useFetchProductos();
+  const { productos, loading, error } = useFetchProductos();
 
-    if (loading) return <p>Cargando productos...</p>;
-    if (error) return <p>{error}</p>;
+  if (loading) return <p>Cargando productos...</p>;
+  if (error) return <p>{error}</p>;
 
-    return (
-        <Section uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
-            {/* Header estilo Meli+ */}
-            <HeaderBox>
-                <h2>Productos Destacados</h2>
-                <HeaderButton as={Link} to="/productos" aria-label="Ver más productos">
-                    Ver más
-                </HeaderButton>
+  return (
+    <Section uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
+      <HeaderBox>
+        <h2>Productos Destacados</h2>
+        <HeaderButton as={Link} to="/productos" aria-label="Ver más productos">
+          Ver más
+        </HeaderButton>
+      </HeaderBox>
 
-            </HeaderBox>
-
-            {/* Cards con fondo distinto */}
-            <ProductsWrapper>
-                <div
-                    className="uk-child-width-1-4@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
-                    data-uk-grid
-                >
-                    {productos.slice(0, 4).map((item) => (
-                        <div key={item.id}>
-                            <ProductCard producto={item} />
-                        </div>
-                    ))}
-                </div>
-            </ProductsWrapper>
-        </Section>
-    );
+      <ProductsWrapper>
+        <div
+          className="uk-child-width-1-4@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
+          data-uk-grid
+        >
+          {productos.slice(0, 4).map((item) => (
+            <div key={item.id}>
+              <ProductCard producto={item} />
+            </div>
+          ))}
+        </div>
+      </ProductsWrapper>
+    </Section>
+  );
 };
 
 export default ProductosDestacados;

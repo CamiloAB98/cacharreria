@@ -7,9 +7,9 @@ const productos = [
     },
     {
         id: 2,
-        nombre: "Martillo Profesional",
-        precio: 45000,
-        imagen: "/assets/images/martillo-profesional.webp",
+        nombre: "Ronda Astucia Naval Batalla de Clanes",
+        precio: 110000,
+        imagen: "/assets/images/ronda-astucia-naval.webp",
     },
     {
         id: 3,
