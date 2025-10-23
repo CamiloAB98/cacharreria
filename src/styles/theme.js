@@ -6,6 +6,7 @@ export const theme = {
         accent: "#FF7B00", // Naranja vivo para botones o precios
         surface: "#FFFFFF", // Fondo de tarjetas y secciones
         background: "#F5F7FA", // Fondo más suave
+        backgroundAlt: "#e0e0e0bb", // Fondo alternativo para secciones
         textLight: "#F8F9FA", // Texto sobre fondos oscuros
         text: "#2E2E2E", // texto principal
         light: "#FFFFFF", // Blanco puro
