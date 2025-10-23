@@ -4,7 +4,6 @@ import { css } from "@emotion/react";
 import ProductCard from "../components/ProductCard";
 import useFetchProductos from "../hooks/useFetchProductos";
 
-/* Helpers theme */
 const cardBase = ({ theme }) => css`${theme.cardBase(theme)}`;
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
@@ -17,12 +16,10 @@ const Section = styled.section`
   text-align: center;
 `;
 
-/* Contenedor central reutilizando token de layout */
 const Container = styled.div`
   ${({ theme }) => theme.container(theme)}
 `;
 
-/* Header superior */
 const HeaderBox = styled.div`
   ${cardBase};
   background: linear-gradient(
@@ -72,7 +69,6 @@ const HeaderButton = styled.button`
   }
 `;
 
-/* Boxcards */
 const ProductsWrapper = styled.div`
   ${cardBase};
   background-color: ${({ theme }) => theme.colors.cardBackground};

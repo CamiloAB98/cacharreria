@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-/* Helpers del theme */
 const cardBase = ({ theme }) => css`${theme.cardBase(theme)}`;
 
 const Card = styled.div`

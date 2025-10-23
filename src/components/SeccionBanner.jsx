@@ -1,4 +1,3 @@
-// src/sections/SeccionBanner.jsx
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
