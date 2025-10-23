@@ -29,9 +29,7 @@ const HeaderBox = styled.div`
   );
   color: ${({ theme }) => theme.colors.textLight};
   border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
-
   padding: ${({ theme }) => `${theme.spacing(8)} ${theme.spacing(4)}`}; 
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,7 +40,6 @@ const HeaderBox = styled.div`
     font-weight: 700;
     margin: 0;
     letter-spacing: 0.2px;
-    /* text-wrap: balance; */
   }
 `;
 
@@ -118,7 +115,6 @@ const Card = styled.div`
     font-size: clamp(1.1rem, 1.6vw, 1.5rem);
     font-weight: 600;
     line-height: 1.2;
-    /* text-wrap: balance; */
     margin: 0;
   }
 `;
@@ -130,7 +126,9 @@ const Categorias = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Section uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 300">
+    <Section
+      data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
+    >
       <Container>
         <HeaderBox>
           <h2>Categorías Destacadas</h2>
@@ -143,13 +141,16 @@ const Categorias = () => {
           <div
             className="uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
             data-uk-grid
+            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 120; repeat: false"
           >
             {categorias.slice(0, 3).map((cat) => (
               <div key={cat.id}>
-                <Card>
+                
+                <Card data-uk-scrollspy="cls: uk-animation-scale-up; delay: 100">
                   <img src={cat.imagen} alt={cat.nombre} loading="lazy" />
                   <h3>{cat.nombre}</h3>
                 </Card>
+        
               </div>
             ))}
           </div>

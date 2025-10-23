@@ -1,4 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import UIkit from "uikit";
+import Icons from "uikit/dist/js/uikit-icons.min.js";
+
+UIkit.use(Icons);
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -9,11 +16,19 @@ import Contacto from "./pages/Contacto";
 import Carrito from "./pages/Carrito";
 
 function App() {
+  const location = useLocation();
+  useEffect(() => {
+    // Dejar que React pinte y luego UIkit escanea
+    const id = requestAnimationFrame(() => UIkit.update());
+    return () => cancelAnimationFrame(id);
+  }, [location.pathname]); // dispara en cada cambio de ruta
+
   return (
     <>
+      {/* Barra de navegación */}
       <Navbar />
-
-      <main className="uk-container uk-margin-top uk-margin-bottom">
+      {/* Rutas principales */}
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos" element={<Productos />} />
@@ -21,8 +36,7 @@ function App() {
           <Route path="/carrito" element={<Carrito />} />
         </Routes>
       </main>
-
-
+      {/* Pie de página */}
       <Footer />
     </>
   );
