@@ -82,16 +82,12 @@ const CategoriesWrapper = styled.div`
 
 const Categorias = () => {
   const { categorias, loading, error } = useFetchCategorias();
-
   if (loading) return <p>Cargando categorías...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <Section
-      data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
-    >
-    <Section
-      data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
+      data-uk-scrollspy="cls: uk-animation-fade; delay: 100; repeat: false; hidden: true"
     >
       <Container>
         <HeaderBox>
@@ -105,8 +101,7 @@ const Categorias = () => {
           <div
             className="uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-small uk-grid-match uk-margin-top"
             data-uk-grid
-            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 120; repeat: false"
-            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 120; repeat: false"
+            data-uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 140; repeat: false; hidden: true; offset-top: 60"
           >
             {categorias.slice(0, 3).map((cat) => (
               <div key={cat.id}>
@@ -119,5 +114,4 @@ const Categorias = () => {
     </Section>
   );
 };
-
 export default Categorias;
