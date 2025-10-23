@@ -1,103 +1,114 @@
-import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import bannerImg from "/assets/images/banner.png";
 
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
-const BannerWrapper = styled.section`
+const Section = styled.section`
+  background: ${({ theme }) => theme.colors.background};
+  padding: ${({ theme }) => `${theme.spacing(8)} ${theme.spacing(8)}`};
+  display: flex;
+  justify-content: center;
+  transition: ${({ theme }) => theme.transition};
+`;
+
+const BannerBox = styled.div`
   position: relative;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  width: 100%;
+  max-width: ${({ theme }) => theme.layout.containerMax};
 
-  /* Overlay con degradado, aprovechando el modo light */
-  .uk-overlay-primary {
-    /* Usa un degradado oscuro sutil sobre la imagen */
-    background: linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.55),
-      rgba(10, 10, 10, 0.35)
-    );
+  min-height: clamp(240px, 32vw, 360px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  background-image: url(${bannerImg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: ${({ theme }) => theme.shadows.card};
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
+    pointer-events: none;
   }
+`;
+
+const Content = styled.div`
+  position: relative;
+  z-index: 1;
+  padding: ${({ theme }) => `clamp(${theme.spacing(4)}, 2vw, ${theme.spacing(8)})`};
+  color: ${({ theme }) => theme.colors.textLight};
+  max-width: 700px;
 
   h1 {
     font-weight: 700;
-    letter-spacing: -0.5px;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    line-height: 1.2;
+    margin: 0 0 ${({ theme }) => theme.spacing(4)};
     color: ${({ theme }) => theme.colors.light};
-    /* tamaño fluido */
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.15;
-    margin: 0;
   }
 
   p {
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    margin: 0 0 ${({ theme }) => theme.spacing(6)};
     color: ${({ theme }) => theme.colors.textLight};
-    font-size: clamp(1rem, 1.8vw, 1.2rem);
-    margin-top: 0.5rem;
+  }
+`;
+
+const CtaButton = styled.button`
+  ${focusRing};
+  all: unset;                       
+  display: inline-block;
+  text-decoration: none !important;
+
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(9)}`}; 
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transition};
+  box-shadow: var(--shadow-card);
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.textLight};
+    transform: translateY(-2px);
   }
 
-  /* Botón primario del banner (estilo "outline" sobre imagen) */
-  .uk-button {
-    font-weight: 600;
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-    border-radius: ${({ theme }) => theme.radius.pill};
-    transition: ${({ theme }) => theme.transition};
-    ${focusRing};
-  }
+  &:focus,
+  &:active,
+  &:visited { text-decoration: none !important; }
 
-  .uk-button-default {
-    /* Outline usando el color principal del theme */
-    border-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.primary};
-    background: transparent;
-  }
-
-  .uk-button-default:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text};
-  }
-
-  /* Mejora de rendimiento/UX */
-  img { will-change: transform; }
   @media (prefers-reduced-motion: reduce) {
-    [data-uk-parallax] { transform: none !important; }
-    .uk-button { transition: none; }
+    transition: none;
+    &:hover { transform: none; }
   }
 `;
 
 function SeccionBanner() {
   return (
-    <BannerWrapper className="uk-section uk-section-muted uk-padding-remove-vertical">
-      <div className="uk-container uk-container-expand">
-        <div
-          className="uk-cover-container uk-height-medium uk-flex uk-flex-middle uk-flex-center"
-          data-uk-parallax="bgy: -200"
-          uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 100; repeat: false"
-        >
-          <img
-            src="public/assets/images/banner.png"
-            alt="Banner Cacharrería"
-            data-uk-cover
-            loading="eager"
-            fetchpriority="high"
-          />
-          <div className="uk-overlay uk-overlay-primary uk-position-cover uk-flex uk-flex-center uk-flex-middle uk-text-center uk-light">
-            <div>
-              <h1 className="uk-heading-medium">Bienvenido a Mi Cacharrería</h1>
-              <p className="uk-text-lead">
-                Todo en papelería, juguetería, productos de aseo y más al mejor precio
-              </p>
-              <a
-                href="/productos"
-                className="uk-button uk-button-default uk-margin-top"
-                aria-label="Ver productos"
-              >
-                Ver productos
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </BannerWrapper>
+    <Section>
+      <BannerBox>
+        <Content>
+          <h1>Bienvenido a Mi Cacharrería</h1>
+          <p>Todo en papelería, juguetería, productos de aseo y más al mejor precio</p>
+          <CtaButton as={Link} to="/productos" aria-label="Ver productos">
+            Ver productos
+          </CtaButton>
+        </Content>
+      </BannerBox>
+    </Section>
   );
 }
 

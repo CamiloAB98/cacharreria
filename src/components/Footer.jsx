@@ -1,7 +1,6 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 
-/* Wrapper principal del footer */
 const FooterWrapper = styled.footer`
   background-color: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.textLight};
@@ -10,14 +9,12 @@ const FooterWrapper = styled.footer`
   transition: ${({ theme }) => theme.transition};
 `;
 
-/* Contenedor interior centrado */
 const FooterContainer = styled.div`
   max-width: ${({ theme }) => theme.layout.containerMax};
   margin: 0 auto;
   padding: 0 1rem;
 `;
 
-/* Navegación inferior (enlaces) */
 const FooterNav = styled.ul`
   list-style: none;
   display: flex;
@@ -28,7 +25,6 @@ const FooterNav = styled.ul`
   margin-bottom: 1rem;
 `;
 
-/* Enlace individual */
 const FooterLink = styled(NavLink)`
   color: ${({ theme }) => theme.colors.textLight};
   font-weight: 500;
@@ -49,7 +45,6 @@ const FooterLink = styled(NavLink)`
   }
 `;
 
-/* Texto inferior */
 const FooterText = styled.p`
   font-size: 0.85rem;
   opacity: 0.8;
@@ -59,22 +54,22 @@ const FooterText = styled.p`
 `;
 
 const Footer = () => {
-    return (
-        <FooterWrapper>
-            <FooterContainer>
-                <FooterNav>
-                    <li><FooterLink to="/">Términos y Condiciones</FooterLink></li>
-                    <li><FooterLink to="/productos">Ayuda / PQR</FooterLink></li>
-                    <li><FooterLink to="/contacto">Trabaja con Nosotros</FooterLink></li>
-                    <li><FooterLink to="/carrito">Acerca de</FooterLink></li>
-                </FooterNav>
+  return (
+    <FooterWrapper>
+      <FooterContainer>
+        <FooterNav>
+          <li><FooterLink to="/">Términos y Condiciones</FooterLink></li>
+          <li><FooterLink to="/productos">Ayuda / PQR</FooterLink></li>
+          <li><FooterLink to="/contacto">Trabaja con Nosotros</FooterLink></li>
+          <li><FooterLink to="/carrito">Acerca de</FooterLink></li>
+        </FooterNav>
 
-                <FooterText>
-                    © {new Date().getFullYear()} Mi Cacharrería. Todos los derechos reservados.
-                </FooterText>
-            </FooterContainer>
-        </FooterWrapper>
-    );
+        <FooterText>
+          © {new Date().getFullYear()} Mi Cacharrería. Todos los derechos reservados.
+        </FooterText>
+      </FooterContainer>
+    </FooterWrapper>
+  );
 };
 
 export default Footer;
