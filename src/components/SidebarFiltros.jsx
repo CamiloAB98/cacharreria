@@ -108,48 +108,66 @@ const parseNumberOrNull = (v) => {
 
 /**
  * Props:
- *  - onAplicar(filters) => filters: { categoria_id: number | null, min: number, max: number }
+ *  - onAplicar(filters) => filters: { categoria_id?: number | null, min?: number, max?: number } OR null
  *  - inicial (optional): { categoria_id: number|null, min, max }
+ *
+ * Behavior:
+ *  - Cambiar categoría => aplica inmediatamente llamando onAplicar({ categoria_id })
+ *  - Botón "Aplicar (precio)" => aplica categoría + min + max
+ *  - Botón "Limpiar" => onAplicar(null)
  */
 function SidebarFiltros({ onAplicar, inicial = {} }) {
     const { categorias, loading, error } = useFetchCategorias();
 
-    // Mantener estado interno de los inputs (strings)
-    const [categoriaId, setCategoriaId] = useState(
-        typeof inicial.categoria_id !== "undefined" && inicial.categoria_id !== null
-            ? String(inicial.categoria_id)
-            : ""
-    );
-    const [min, setMin] = useState(inicial.min ?? "");
-    const [max, setMax] = useState(inicial.max ?? "");
+    // Local state: strings for inputs (safer with uncontrolled -> controlled)
+    const [categoriaId, setCategoriaId] = useState("");
+    const [min, setMin] = useState("");
+    const [max, setMax] = useState("");
 
-    // Solo inicializar al montar (no cada vez que `appliedFilters` cambia)
+    // Inicializar solo al montar para evitar "rebotes" cuando parent actualiza appliedFilters.
     useEffect(() => {
-        setCategoriaId(
-            typeof inicial.categoria_id !== "undefined" && inicial.categoria_id !== null
-                ? String(inicial.categoria_id)
-                : ""
-        );
-        setMin(inicial.min ?? "");
-        setMax(inicial.max ?? "");
-    }, []);
+        // inicial puede ser null -> usamos optional chaining y valores por defecto
+        const inicialCat = inicial && typeof inicial.categoria_id !== "undefined" ? inicial.categoria_id : null;
+        const inicialMin = inicial && typeof inicial.min !== "undefined" ? inicial.min : "";
+        const inicialMax =
+            inicial && typeof inicial.max !== "undefined" && inicial.max !== Number.MAX_SAFE_INTEGER
+                ? inicial.max
+                : "";
 
-    const aplicar = () => {
+        setCategoriaId(inicialCat === null ? "" : String(inicialCat));
+        setMin(inicialMin === "" ? "" : String(inicialMin));
+        setMax(inicialMax === "" ? "" : String(inicialMax));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // mount-only
+
+    // Handler: al cambiar categoría aplicamos inmediatamente (solo categoría)
+    const handleCategoriaChange = (value) => {
+        setCategoriaId(value);
+        const catVal = value === "" ? null : Number(value);
+        // Llamamos al parent con solo la categoría — el parent debe fusionar
+        if (typeof onAplicar === "function") {
+            onAplicar({ categoria_id: catVal });
+        }
+    };
+
+    // Aplicar precio (botón)
+    const aplicarPrecio = () => {
         const minN = parseNumberOrNull(min);
         const maxN = parseNumberOrNull(max);
-
-        onAplicar({
+        const payload = {
             categoria_id: categoriaId === "" ? null : Number(categoriaId),
             min: minN === null ? 0 : minN,
             max: maxN === null ? Number.MAX_SAFE_INTEGER : maxN,
-        });
+        };
+        if (typeof onAplicar === "function") onAplicar(payload);
     };
 
+    // Limpiar
     const limpiar = () => {
         setCategoriaId("");
         setMin("");
         setMax("");
-        onAplicar(null);
+        if (typeof onAplicar === "function") onAplicar(null);
     };
 
     if (loading) return <Fallback>Cargando filtros...</Fallback>;
@@ -161,13 +179,14 @@ function SidebarFiltros({ onAplicar, inicial = {} }) {
 
             <Row>
                 <strong style={{ display: "block", marginBottom: 8 }}>Categoría</strong>
+
                 <RadioLabel key="cat-todas">
                     <input
                         type="radio"
                         name="categoria"
                         value=""
-                        checked={categoriaId === "" || categoriaId === null}
-                        onChange={(e) => setCategoriaId(e.target.value)}
+                        checked={categoriaId === ""}
+                        onChange={(e) => handleCategoriaChange(e.target.value)}
                     />
                     <span>Todas</span>
                 </RadioLabel>
@@ -179,7 +198,7 @@ function SidebarFiltros({ onAplicar, inicial = {} }) {
                             name="categoria"
                             value={String(c.id)}
                             checked={categoriaId === String(c.id)}
-                            onChange={(e) => setCategoriaId(e.target.value)}
+                            onChange={(e) => handleCategoriaChange(e.target.value)}
                             aria-label={`Filtrar por ${c.nombre}`}
                         />
                         <span>{c.nombre}</span>
@@ -204,7 +223,7 @@ function SidebarFiltros({ onAplicar, inicial = {} }) {
                 <NumberInput
                     type="number"
                     min="0"
-                    placeholder="999999"
+                    placeholder="ej. 500000"
                     value={max}
                     onChange={(e) => setMax(e.target.value)}
                     aria-label="Precio máximo"
@@ -212,8 +231,8 @@ function SidebarFiltros({ onAplicar, inicial = {} }) {
             </Row>
 
             <Row>
-                <ButtonPrimary onClick={aplicar} aria-label="Aplicar filtros">
-                    Aplicar
+                <ButtonPrimary onClick={aplicarPrecio} aria-label="Aplicar filtros de precio">
+                    Aplicar (precio)
                 </ButtonPrimary>
             </Row>
 

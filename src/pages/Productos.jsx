@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
+import { useLocation } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import SidebarFiltros from "../components/SidebarFiltros";
 import useFetchProductos from "../hooks/useFetchProductos";
@@ -120,9 +121,18 @@ const PageButton = styled.button`
 function Productos() {
     const { productos, loading: loadingP } = useFetchProductos();
     const { categorias } = useFetchCategorias();
+    const location = useLocation();
+
+    // Parsear query string
+    const query = new URLSearchParams(location.search);
+    const categoriaQuery = query.get("categoria"); // null si no existe
 
     // UI state
-    const [appliedFilters, setAppliedFilters] = useState(null); // null => no filters
+    const [appliedFilters, setAppliedFilters] = useState(
+        categoriaQuery
+            ? { categoria_id: Number(categoriaQuery), min: 0, max: Number.MAX_SAFE_INTEGER }
+            : null
+    );
     const [searchGlobal, setSearchGlobal] = useState("");
     const [orden, setOrden] = useState("default");
     const [vista, setVista] = useState("mosaico");
@@ -130,8 +140,52 @@ function Productos() {
 
     const perPage = 12;
 
-    // reset page when filters/search/orden/vista change
+    // Reset page when filters/search/orden/vista change
     useEffect(() => setPagina(1), [appliedFilters, searchGlobal, orden, vista]);
+
+    // Si cambia la query string (ej: navegación manual)
+    useEffect(() => {
+        if (categoriaQuery) {
+            setAppliedFilters({
+                categoria_id: Number(categoriaQuery),
+                min: 0,
+                max: Number.MAX_SAFE_INTEGER,
+            });
+        } else {
+            setAppliedFilters(null);
+        }
+    }, [categoriaQuery]);
+
+    // Manejador que interpreta merges parciales enviados por Sidebar
+    const handleAplicarDesdeSidebar = (filters) => {
+        // filters === null  => limpiar todo
+        if (filters === null) {
+            setAppliedFilters(null);
+            return;
+        }
+
+        const hasMin = Object.prototype.hasOwnProperty.call(filters, "min");
+        const hasMax = Object.prototype.hasOwnProperty.call(filters, "max");
+        const hasCat = Object.prototype.hasOwnProperty.call(filters, "categoria_id");
+
+        // Caso: solo cambio de categoría (Sidebar manda { categoria_id })
+        if (hasCat && !hasMin && !hasMax) {
+            setAppliedFilters((prev) => {
+                const prevMin = prev?.min ?? 0;
+                const prevMax = prev?.max ?? Number.MAX_SAFE_INTEGER;
+                return {
+                    categoria_id: filters.categoria_id,
+                    min: prevMin,
+                    max: prevMax,
+                };
+            });
+            return;
+        }
+
+        // Caso: filtro completo (categoria + min + max) => reemplaza
+        // (ejemplo: cuando usuario pulsa "Aplicar (precio)")
+        setAppliedFilters(filters);
+    };
 
     /* -------- FILTRADO (useMemo) -------- */
     const filtrados = useMemo(() => {
@@ -150,23 +204,17 @@ function Productos() {
         }
 
         // appliedFilters
-        // appliedFilters (robusto)
         if (appliedFilters) {
-            // soporta distintos shapes: categoria_id | categoria | categorias(array)
             const catSingle = appliedFilters.categoria_id ?? appliedFilters.categoria ?? null;
-            const catArray = appliedFilters.categorias ?? null;
 
-            if (Array.isArray(catArray) && catArray.length > 0) {
-                const allowed = catArray.map((x) => Number(x));
-                list = list.filter((p) => allowed.includes(Number(p.categoria_id)));
-            } else if (catSingle !== null && catSingle !== "" && typeof catSingle !== "undefined") {
+            if (catSingle !== null && catSingle !== "" && typeof catSingle !== "undefined") {
                 const catIdNum = Number(catSingle);
                 if (!Number.isNaN(catIdNum)) {
                     list = list.filter((p) => Number(p.categoria_id) === catIdNum);
                 }
             }
 
-            // precio (igual que antes)
+            // precio
             if (typeof appliedFilters.min === "number") {
                 list = list.filter((p) => p.precio >= appliedFilters.min);
             }
@@ -174,7 +222,6 @@ function Productos() {
                 list = list.filter((p) => p.precio <= appliedFilters.max);
             }
         }
-
 
         // ordenar por precio
         switch (orden) {
@@ -185,7 +232,7 @@ function Productos() {
                 list.sort((a, b) => b.precio - a.precio);
                 break;
             default:
-            // keep original
+            // mantener original
         }
 
         return list;
@@ -246,15 +293,13 @@ function Productos() {
 
             <GridLayout>
                 <div>
-                    <div className="uk-card uk-card-default uk-card-body">
+                    <div className="uk-card uk-card-default uk-card-body" data-uk-sticky="offset: 100; bottom: true">
                         <SidebarFiltros
-                            onAplicar={(filters) => {
-                                setAppliedFilters(filters);
-                            }}
+                            onAplicar={handleAplicarDesdeSidebar}
+                            inicial={appliedFilters}
                         />
                     </div>
                 </div>
-
 
                 <div>
                     <ProductosGrid vista={vista} role="list">
@@ -286,7 +331,11 @@ function Productos() {
                             </PageButton>
                         ))}
 
-                        <button className="uk-button uk-button-default" onClick={() => setPagina((p) => Math.min(totalPages, p + 1))} disabled={pagina === totalPages}>
+                        <button
+                            className="uk-button uk-button-default"
+                            onClick={() => setPagina((p) => Math.min(totalPages, p + 1))}
+                            disabled={pagina === totalPages}
+                        >
                             Siguiente
                         </button>
                     </PaginationRow>
