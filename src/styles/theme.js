@@ -65,7 +65,7 @@ export const theme = {
     section: (t) => `
     background-color: ${t.colors.surface};
     border-radius: ${t.radius.lg};
-    padding-top: ${t.spacing(12)};  /* 48px */
+    padding-top: ${t.spacing(12)};
     padding-bottom: ${t.spacing(12)};
   `,
 };

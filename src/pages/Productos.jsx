@@ -10,6 +10,8 @@ import useFetchCategorias from "../hooks/useFetchCategorias";
 const Page = styled.section`
   ${({ theme }) => theme.container(theme)}
   margin-top: ${({ theme }) => theme.spacing(10)};
+  padding: ${({ theme }) => theme.spacing(10)};
+  border-radius: ${({ theme }) => theme.radius.lg};
   margin-bottom: ${({ theme }) => theme.spacing(10)};
 `;
 
