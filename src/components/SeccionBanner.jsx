@@ -105,7 +105,7 @@ function SeccionBanner() {
         data-uk-scrollspy="cls: uk-animation-slide-bottom-medium; repeat: false; delay: 200"
       >
         <Content data-uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 150;">
-          <h1>Bienvenido a Mi Cacharrería</h1>
+          <h1>Cacharrería Bastidas</h1>
           <p>Todo en papelería, juguetería, productos de aseo al mejor precio</p>
           <CtaButton as={Link} to="/productos" aria-label="Ver productos">
             Ver productos

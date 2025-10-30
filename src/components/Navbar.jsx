@@ -55,7 +55,7 @@ const Navbar = () => {
                 className="uk-navbar-left"
             >
                 <NavLink to="/" className="uk-navbar-item uk-logo">
-                    Mi Cacharrería
+                    Cacharrería Bastidas
                 </NavLink>
             </div>
 
