@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import bannerImg from "/assets/images/cacharreria_banner.webp";
+import bannerImg from "/assets/images/banner2.jpg";
 
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
@@ -30,15 +30,15 @@ const BannerBox = styled.div`
   background-repeat: no-repeat;
   box-shadow: ${({ theme }) => theme.shadows.card};
 
-  /* Overlay con gradiente */
+  /* 🔹 Overlay más oscuro para opacar la imagen */
   &::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
       135deg,
-      rgba(0, 0, 0, 0.45),
-      rgba(0, 0, 0, 0.25)
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.5)
     );
     pointer-events: none;
   }
@@ -52,19 +52,22 @@ const Content = styled.div`
   max-width: 700px;
 
   h1 {
-    font-weight: 700;
-    font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+    font-weight: 800; /* 🔹 más grueso */
+    font-size: clamp(2.5rem, 5vw, 4rem); /* 🔹 más grande */
     line-height: 1.2;
     margin-bottom: ${({ theme }) => theme.spacing(2)};
     color: ${({ theme }) => theme.colors.light};
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8); /* 🔹 resalta sobre la imagen */
   }
 
   p {
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
     margin-bottom: ${({ theme }) => theme.spacing(4)};
     color: ${({ theme }) => theme.colors.textLight};
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
   }
 `;
+
 
 const CtaButton = styled.button`
   ${focusRing};
