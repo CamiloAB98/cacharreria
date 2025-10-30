@@ -15,7 +15,7 @@ const useFetchCategorias = () => {
                 setError("Error al cargar las categorías");
                 setLoading(false);
             }
-        }, 1000);
+        }, 1500);
 
         return () => clearTimeout(timer);
     }, []);

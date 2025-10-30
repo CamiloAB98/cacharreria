@@ -1,12 +1,12 @@
 import SeccionBanner from "../components/SeccionBanner"
-import Categorias from "../components/Categorias"
+import CategoriasSlide from "../components/CategoriasSlide"
 import ProductosDestacados from "../components/ProductosDestacados"
 
 const Home = () => {
     return (
         <div>
             <SeccionBanner />
-            <Categorias />
+            <CategoriasSlide />
             <ProductosDestacados />
         </div>
     )

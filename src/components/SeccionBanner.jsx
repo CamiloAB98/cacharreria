@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import bannerImg from "/assets/images/banner.png";
+import bannerImg from "/assets/images/cacharreria_banner.webp";
 
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
