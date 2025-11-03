@@ -63,6 +63,33 @@ const DropdownPanel = styled.div`
   }
 `;
 
+const CartButton = styled.button`
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 🔥 Quita completamente subrayado y color heredado de UIkit */
+  text-decoration: none !important;
+  color: ${({ theme }) => theme.colors.primary};
+  outline: none;
+
+  /* Quitar subrayado o efectos del pseudo-enlace que mete UIkit */
+  svg,
+  a,
+  span {
+    text-decoration: none !important;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+
 export default function CartIcon() {
     const { cart, getItemCount } = useCart();
     const count = Number(getItemCount ?? 0);
@@ -117,17 +144,17 @@ export default function CartIcon() {
             ) : (
                 <>
                     {/* Trigger button (click toggles) */}
-                    <button
+                    <CartButton
                         type="button"
                         onClick={toggle}
                         aria-expanded={isOpen}
                         aria-haspopup="true"
                         aria-controls="mini-cart-panel"
                         className="uk-button uk-button-text"
-                        style={{ background: "transparent", border: "none", padding: 6, cursor: "pointer" }}
                     >
-                        <span uk-icon="cart" style={{ fontSize: 20 }} aria-hidden="true" />
-                    </button>
+                        <span uk-icon="cart" aria-hidden="true" />
+                    </CartButton>
+
 
                     <CountBadge>{count}</CountBadge>
 
