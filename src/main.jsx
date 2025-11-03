@@ -9,12 +9,18 @@ import theme from "./styles/theme";
 
 import "uikit/dist/css/uikit.min.css";
 
+// IMPORTA AQUI EL PROVIDER DEL CARRITO
+import { CartProvider } from "./context/CartContext";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
             <GlobalStyles />
             <BrowserRouter>
-                <App />
+                {/* Envuelve la app con el CartProvider */}
+                <CartProvider>
+                    <App />
+                </CartProvider>
             </BrowserRouter>
         </ThemeProvider>
     </React.StrictMode>

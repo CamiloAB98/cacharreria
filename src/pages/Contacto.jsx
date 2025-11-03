@@ -1,11 +1,6 @@
-// src/sections/Contacto.jsx
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { css, useTheme } from "@emotion/react";
-
-/* ===========================
-   Ajusta si quieres otro nombre de archivo
-   =========================== */
 
 /* ===== styled ===== */
 const Section = styled.section`
@@ -118,6 +113,7 @@ const ButtonPrimary = styled.button`
   font-weight: 700;
   cursor: pointer;
   transition: ${({ theme }) => theme.transition};
+  text-decoration: none !important;
 
   &:hover {
     background: ${({ theme }) => theme.colors.accent};

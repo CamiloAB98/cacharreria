@@ -1,4 +1,3 @@
-// src/sections/CategoriasSlide.jsx
 import React from "react";
 import styled from "@emotion/styled";
 import { css, useTheme } from "@emotion/react";

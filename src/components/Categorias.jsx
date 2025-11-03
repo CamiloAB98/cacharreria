@@ -1,4 +1,3 @@
-// src/sections/Categorias.jsx
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import useFetchCategorias from "../hooks/useFetchCategorias";

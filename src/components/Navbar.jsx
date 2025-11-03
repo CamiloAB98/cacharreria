@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import CartIcon from "./cart/CartIcon.jsx";
+import { useCart } from "../context/CartContext";
 
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
@@ -48,30 +50,28 @@ const NavbarContainer = styled.nav`
 `;
 
 const Navbar = () => {
-    return (
-        <NavbarContainer data-uk-navbar>
-            <div
-                uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 100; repeat: false"
-                className="uk-navbar-left"
-            >
-                <NavLink to="/" className="uk-navbar-item uk-logo">
-                    Cacharrería Bastidas
-                </NavLink>
-            </div>
+  return (
+    <NavbarContainer data-uk-navbar>
+      <div
+        uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 100; repeat: false"
+        className="uk-navbar-left"
+      >
+        <NavLink to="/" className="uk-navbar-item uk-logo">
+          Cacharrería Bastidas
+        </NavLink>
+      </div>
 
-            <div
-                className="uk-navbar-right uk-visible@m"
-                uk-scrollspy="cls: uk-animation-slide-left; target: > *; delay: 100; repeat: false"
-            >
-                <ul className="uk-navbar-nav">
-                    <li><NavLink to="/">Inicio</NavLink></li>
-                    <li><NavLink to="/productos">Productos</NavLink></li>
-                    <li><NavLink to="/contacto">Contacto</NavLink></li>
-                    <li><NavLink to="/carrito">Carrito</NavLink></li>
-                </ul>
-            </div>
-        </NavbarContainer>
-    );
+      <div className="uk-navbar-right uk-visible@m" uk-scrollspy="cls: uk-animation-slide-left; target: > *; delay: 100; repeat: false">
+        <ul className="uk-navbar-nav" style={{ alignItems: "center" }}>
+          <li><NavLink to="/">Inicio</NavLink></li>
+          <li><NavLink to="/productos">Productos</NavLink></li>
+          <li><NavLink to="/contacto">Contacto</NavLink></li>
+          <li><CartIcon /></li>
+        </ul>
+      </div>
+
+    </NavbarContainer>
+  );
 };
 
 export default Navbar;
