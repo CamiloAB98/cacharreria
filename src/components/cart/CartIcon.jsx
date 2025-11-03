@@ -1,8 +1,9 @@
 // src/components/cart/CartIcon.jsx
-import React from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartContext"; // <-- ruta correcta para tu estructura
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 import styled from "@emotion/styled";
+import MiniCart from "./MiniCart";
 
 const Wrapper = styled.div`
   position: relative;
@@ -10,7 +11,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-/* Link que redirige a /carrito */
+/* Link that goes to full cart */
 const CartLink = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -18,12 +19,14 @@ const CartLink = styled(Link)`
   padding: 6px;
   border-radius: 6px;
   color: ${({ theme }) => theme.colors.primary};
-  text-decoration: none;
+  text-decoration: none !important;
 
-  &:hover { opacity: 0.9; }
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
-/* badge pequeño con número */
+/* small badge */
 const CountBadge = styled.span`
   position: absolute;
   top: -6px;
@@ -38,19 +41,105 @@ const CountBadge = styled.span`
   box-shadow: ${({ theme }) => theme.shadows.card};
 `;
 
+/* dropdown panel position */
+const DropdownPanel = styled.div`
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 1400;
+  /* small responsive width */
+  min-width: 300px;
+  max-width: 420px;
+  animation: slideIn 160ms ease-out;
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 export default function CartIcon() {
     const { cart, getItemCount } = useCart();
-    const count = Number(getItemCount ?? 0); // aseguramos número
+    const count = Number(getItemCount ?? 0);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+    const wrapperRef = useRef(null);
+
+    // Close dropdown on route change (so it won't remain open when navigating)
+    useEffect(() => {
+        setIsOpen(false);
+    }, [location.pathname]);
+
+    // Click outside to close
+    useEffect(() => {
+        function onDocClick(e) {
+            if (!wrapperRef.current) return;
+            if (!wrapperRef.current.contains(e.target)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", onDocClick);
+        return () => document.removeEventListener("mousedown", onDocClick);
+    }, []);
+
+    // If on cart page, do NOT render the dropdown panel — only icon + badge
+    const onCartPage = location.pathname === "/carrito" || location.pathname.startsWith("/carrito/");
+
+    // Toggle handler (open/close)
+    const toggle = () => setIsOpen((s) => !s);
+
+    // When user clicks "Ver carrito completo" inside MiniCart we want to navigate and ensure closing.
+    // We'll pass a handler down to MiniCart via context/props if needed. Simpler: intercept Link click from MiniCart by delegating closure
+    // But to keep MiniCart unchanged, we handle closure on route change (already done).
+    // For an explicit close+navigate helper:
+    const goToCart = (e) => {
+        // If called from a click event, prevent default to close then navigate
+        if (e && typeof e.preventDefault === "function") e.preventDefault();
+        setIsOpen(false);
+        navigate("/carrito");
+    };
 
     return (
-        <Wrapper aria-live="polite" aria-atomic="true">
-            <CartLink to="/carrito" aria-label={`Ir al carrito — ${count} ${count === 1 ? "producto" : "productos"}`}>
-                {/* UIkit icon — requiere que tengas UIkit Icons cargado en main.jsx */}
-                <span uk-icon="cart" style={{ fontSize: 20 }} aria-hidden="true" />
-            </CartLink>
+        <Wrapper ref={wrapperRef} aria-live="polite" aria-atomic="true">
+            {onCartPage ? (
+                // Only the icon link (no dropdown)
+                <CartLink to="/carrito" aria-label={`Ir al carrito — ${count} ${count === 1 ? "producto" : "productos"}`}>
+                    <span uk-icon="cart" style={{ fontSize: 20 }} aria-hidden="true" />
+                    <CountBadge>{count}</CountBadge>
+                </CartLink>
+            ) : (
+                <>
+                    {/* Trigger button (click toggles) */}
+                    <button
+                        type="button"
+                        onClick={toggle}
+                        aria-expanded={isOpen}
+                        aria-haspopup="true"
+                        aria-controls="mini-cart-panel"
+                        className="uk-button uk-button-text"
+                        style={{ background: "transparent", border: "none", padding: 6, cursor: "pointer" }}
+                    >
+                        <span uk-icon="cart" style={{ fontSize: 20 }} aria-hidden="true" />
+                    </button>
 
-            {/* mostramos el badge SIEMPRE (0,1,2...) según pediste) */}
-            <CountBadge>{count}</CountBadge>
+                    <CountBadge>{count}</CountBadge>
+
+                    {/* Dropdown panel (React-controlled) */}
+                    {isOpen && (
+                        <DropdownPanel id="mini-cart-panel" role="dialog" aria-label="Mini carrito">
+                            {/* We render MiniCart and pass a onViewCart handler to close + navigate */}
+                            <MiniCart onViewCart={(ev) => goToCart(ev)} />
+                        </DropdownPanel>
+                    )}
+                </>
+            )}
         </Wrapper>
     );
 }

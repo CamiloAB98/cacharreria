@@ -1,165 +1,174 @@
+// src/components/cart/MiniCart.jsx
+import React from "react";
 import styled from "@emotion/styled";
+import { useTheme } from "@emotion/react";
 import { useCart } from "../../context/CartContext";
-import { Link } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import UIkit from "uikit";
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: #00000066;
-  backdrop-filter: blur(2px);
-  opacity: ${({ open }) => (open ? 1 : 0)};
-  pointer-events: ${({ open }) => (open ? "auto" : "none")};
-  transition: opacity .25s ease;
-  z-index: 98;
-`;
+import { Link } from "react-router-dom";
 
 const Panel = styled.div`
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 330px;
+  min-width: 320px;
+  max-width: 420px;
+  padding: ${({ theme }) => theme.spacing(3)};
   background: ${({ theme }) => theme.colors.surface};
-  box-shadow: -4px 0 14px rgba(0,0,0,.12);
-  padding: ${({ theme }) => theme.spacing(4)};
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(3)};
-  transform: translateX(${({ open }) => (open ? "0" : "100%")});
-  transition: transform .28s ease;
-  z-index: 99;
+  box-shadow: ${({ theme }) => theme.shadows.card};
+  border-radius: ${({ theme }) => theme.radius.md};
 `;
 
-const Top = styled.div`
+const ItemRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing(2)};
   align-items: center;
-  font-weight: 700;
-  font-size: 1.2rem;
-`;
-
-const Items = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 4px;
-`;
-
-const Item = styled.div`
-  display: flex;
-  gap: 12px;
-  margin-bottom: 18px;
+  padding: ${({ theme }) => `${theme.spacing(2)} 0`};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.background};
 `;
 
 const Thumb = styled.img`
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   border-radius: ${({ theme }) => theme.radius.sm};
   background: ${({ theme }) => theme.colors.light};
   padding: ${({ theme }) => theme.spacing(1)};
 `;
 
-const Name = styled.div`
-  font-weight: 600;
+const Title = styled.div`
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 0.95rem;
 `;
 
-const QtyRow = styled.div`
+const QtyBox = styled.div`
   display: flex;
-  align-items: center;
   gap: 6px;
-  margin-top: 6px;
+  align-items: center;
 `;
 
 const QtyBtn = styled.button`
-  padding: 4px 9px;
-  border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors.muted};
   background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.muted};
+  padding: 6px 8px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: ${({ theme }) => theme.transition};
+  font-weight: 700;
 
   &:hover {
     background: ${({ theme }) => theme.colors.muted};
   }
 `;
 
-const RemoveBtn = styled.button`
-  background: transparent;
-  border: none;
-  color: ${({ theme }) => theme.colors.danger || "#e74c3c"};
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-top: 4px;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const CheckoutBtn = styled(Link)`
-  display: block;
-  text-align: center;
-  padding: ${({ theme }) => `${theme.spacing(2.5)} ${theme.spacing(3)}`};
-  background: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.radius.md};
+const SmallMuted = styled.div`
+  font-size: 0.85rem;
   color: ${({ theme }) => theme.colors.text};
-  font-weight: 800;
-  text-decoration: none;
-  transition: ${({ theme }) => theme.transition};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.accent};
-    color: ${({ theme }) => theme.colors.textLight};
-  }
+  opacity: 0.8;
 `;
 
-export default function MiniCart({ open, onClose }) {
-    const { cart, increaseQty, decreaseQty, removeFromCart, getSubtotal } = useCart();
-    const subtotal = getSubtotal;
+const Footer = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(3)};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
 
-    return (
+const BtnPrimary = styled.a`
+  display: inline-block;
+  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(3)}`};
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
+  text-decoration: none !important;
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-weight: 700;
+  text-align: center;
+
+  &:hover { background: ${({ theme }) => theme.colors.accent}; color: ${({ theme }) => theme.colors.textLight}; }
+`;
+
+const BtnGhost = styled(Link)`
+  display: inline-block;
+  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(3)}`};
+  border-radius: ${({ theme }) => theme.radius.md};
+  text-decoration: none !important;
+  border: 1px solid ${({ theme }) => theme.colors.muted};
+  color: ${({ theme }) => theme.colors.text};
+  text-align: center;
+
+  &:hover { background: ${({ theme }) => theme.colors.muted}; }
+`;
+
+export default function MiniCart({ onClose }) {
+  const theme = useTheme();
+  const { cart, increaseQty, decreaseQty, removeFromCart, getSubtotal } = useCart();
+
+  const subtotal = getSubtotal ?? 0;
+
+  // WhatsApp link: same number used elsewhere
+  const whatsappFull = "573108134117";
+  const buildWaMessage = () => {
+    if (!cart || cart.length === 0) return "Hola, quiero hacer una compra";
+    let lines = [`Hola, quiero finalizar esta compra en Cacharrería Bastidas:`, ""];
+    cart.forEach((it, idx) => {
+      lines.push(`${idx + 1}) ${it.nombre} x ${it.cantidad} - $${(it.precio * it.cantidad).toLocaleString("es-CO")}`);
+    });
+    lines.push("", `Subtotal: $${subtotal.toLocaleString("es-CO")}`);
+    return encodeURIComponent(lines.join("\n"));
+  };
+  const waHref = `https://wa.me/${whatsappFull}?text=${buildWaMessage()}`;
+
+  return (
+    <Panel role="dialog" aria-label="Resumen rápido del carrito">
+      {(!cart || cart.length === 0) ? (
+        <div style={{ padding: theme.spacing(2), textAlign: "center" }}>
+          <SmallMuted>Tu carrito está vacío</SmallMuted>
+        </div>
+      ) : (
         <>
-            <Overlay open={open} onClick={onClose} />
-            <Panel open={open}>
-                <Top>
-                    Carrito ({cart.length})
-                    <FaTimes style={{ cursor: "pointer" }} onClick={onClose} />
-                </Top>
+          <div>
+            {cart.map((it) => (
+              <ItemRow key={it.id}>
+                <Thumb src={it.imagen} alt={it.nombre} />
+                <div style={{ flex: 1 }}>
+                  <Title>{it.nombre}</Title>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+                    <SmallMuted>${(it.precio * it.cantidad).toLocaleString("es-CO")}</SmallMuted>
 
-                <Items>
-                    {cart.length === 0 && <div>Tu carrito está vacío</div>}
-                    {cart.map((item) => (
-                        <Item key={item.id}>
-                            <Thumb src={item.imagen} />
-                            <div style={{ flex: 1 }}>
-                                <Name>{item.nombre}</Name>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <QtyBox>
+                        <QtyBtn aria-label={`Disminuir ${it.nombre}`} onClick={() => decreaseQty(it.id)}>-</QtyBtn>
+                        <div style={{ minWidth: 28, textAlign: "center", fontWeight: 700 }}>{it.cantidad}</div>
+                        <QtyBtn aria-label={`Aumentar ${it.nombre}`} onClick={() => increaseQty(it.id)}>+</QtyBtn>
+                      </QtyBox>
 
-                                <QtyRow>
-                                    <QtyBtn onClick={() => decreaseQty(item.id)}>-</QtyBtn>
-                                    <div>{item.cantidad}</div>
-                                    <QtyBtn onClick={() => increaseQty(item.id)}>+</QtyBtn>
-                                </QtyRow>
+                      <button
+                        onClick={() => removeFromCart(it.id)}
+                        style={{ border: "none", background: "transparent", color: theme.colors.danger || "#e74c3c", cursor: "pointer" }}
+                        aria-label={`Eliminar ${it.nombre}`}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ItemRow>
+            ))}
+          </div>
 
-                                <RemoveBtn onClick={() => removeFromCart(item.id)}>
-                                    Eliminar
-                                </RemoveBtn>
-                            </div>
-                        </Item>
-                    ))}
-                </Items>
+          <Footer>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <SmallMuted>Subtotal</SmallMuted>
+              <div style={{ fontWeight: 800 }}>${subtotal.toLocaleString("es-CO")}</div>
+            </div>
 
-                {cart.length > 0 && (
-                    <>
-                        <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>
-                            Subtotal: ${subtotal.toLocaleString("es-CO")}
-                        </div>
-                        <CheckoutBtn to="/carrito" onClick={onClose}>
-                            Finalizar compra
-                        </CheckoutBtn>
-                    </>
-                )}
-            </Panel>
+            <BtnPrimary href={waHref} target="_blank" rel="noopener noreferrer">
+              Finalizar por WhatsApp
+            </BtnPrimary>
+
+            <BtnGhost to="/carrito" onClick={onClose}>
+              Ver carrito completo
+            </BtnGhost>
+          </Footer>
         </>
-    );
+      )}
+    </Panel>
+  );
 }

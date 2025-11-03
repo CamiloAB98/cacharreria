@@ -4,6 +4,8 @@ import { useTheme } from "@emotion/react";
 import { useCart } from "../context/CartContext";
 import CartItemRow from "../components/cart/CartItemRow";
 import CartSummary from "../components/cart/CartSummary";
+import { useEffect } from "react";
+import UIkit from "uikit";
 
 /* ===== layout-only styles (la UI específica está en los componentes hijos) ===== */
 const Section = styled.section`
@@ -54,6 +56,11 @@ const EmptyBox = styled.div`
 `;
 
 const Carrito = () => {
+    useEffect(() => {
+        // Cierra el offcanvas si está abierto
+        const offcanvas = UIkit.offcanvas("#mini-cart");
+        if (offcanvas) offcanvas.hide();
+    }, []);
     const theme = useTheme();
     const { cart, getSubtotal } = useCart();
 
