@@ -63,7 +63,7 @@ const Footer = () => {
         <FooterNav>
           <li><FooterLink to="/terminos">Términos y Condiciones</FooterLink></li>
           <li><FooterLink to="/ayudapqr">Ayuda / PQR</FooterLink></li>
-          <li><FooterLink to="/contacto">Trabaja con Nosotros</FooterLink></li>
+          <li><FooterLink to="/trabaja-con-nosotros">Trabaja con Nosotros</FooterLink></li>
           <li><FooterLink to="/carrito">Acerca de</FooterLink></li>
         </FooterNav>
 

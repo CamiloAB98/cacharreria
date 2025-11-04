@@ -16,6 +16,7 @@ import Contacto from "./pages/Contacto";
 import Carrito from "./pages/Carrito";
 import Terminos from "./pages/Terminos";
 import Ayudapqr from "./pages/Ayudapqr";
+import TrabajaConNosotros from "./pages/TrabajaConNosotros";
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function App() {
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/terminos" element={<Terminos />} />
           <Route path="/ayudapqr" element={<Ayudapqr />} />
+          <Route path="/trabaja-con-nosotros" element={<TrabajaConNosotros />} />
         </Routes>
       </main>
       {/* Pie de página */}
