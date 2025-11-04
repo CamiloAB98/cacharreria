@@ -7,26 +7,47 @@ import { useCart } from "../context/CartContext";
 const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
 const NavbarContainer = styled.nav`
-  background-color: ${({ theme }) => theme.colors.light};
-  box-shadow: ${({ theme }) => theme.shadows.card};
   position: sticky;
   top: 0;
+  width: 100%;
   z-index: 1000;
 
-  min-height: ${({ theme }) => theme.spacing(14)}; 
+  /* Fondo del antiguo banner */
+  background-image: url("/assets/images/banner2.jpg"); /* Ajusta esta ruta */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 0;
+  }
+
+  /* Asegura que el contenido esté encima del overlay */
+  > div {
+    position: relative;
+    z-index: 1;
+  }
+
+  box-shadow: ${({ theme }) => theme.shadows.card};
+  min-height: ${({ theme }) => theme.spacing(14)};
   padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(8)}`};
   transition: ${({ theme }) => theme.transition};
 
   .uk-navbar-item.uk-logo {
     font-weight: 700;
     font-size: clamp(1.1rem, 1.6vw, 1.4rem);
-    color: ${({ theme }) => theme.colors.primary} !important;
+    color: #fff !important;
   }
 
   .uk-navbar-nav > li > a {
     ${focusRing};
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.text} !important;
+    color: #fff !important;
     font-weight: 500;
     padding: ${({ theme }) => theme.spacing(4)};
     border-bottom: 2px solid transparent;
@@ -50,26 +71,24 @@ const NavbarContainer = styled.nav`
 `;
 
 const Navbar = () => {
+  const { cartItems } = useCart();
+
   return (
     <NavbarContainer data-uk-navbar>
-      <div
-        uk-scrollspy="cls: uk-animation-fade; target: > *; delay: 100; repeat: false"
-        className="uk-navbar-left"
-      >
+      <div className="uk-navbar-left">
         <NavLink to="/" className="uk-navbar-item uk-logo">
           Cacharrería Bastidas
         </NavLink>
       </div>
 
-      <div className="uk-navbar-right uk-visible@m" uk-scrollspy="cls: uk-animation-slide-left; target: > *; delay: 100; repeat: false">
+      <div className="uk-navbar-right uk-visible@m">
         <ul className="uk-navbar-nav" style={{ alignItems: "center" }}>
           <li><NavLink to="/">Inicio</NavLink></li>
           <li><NavLink to="/productos">Productos</NavLink></li>
           <li><NavLink to="/contacto">Contacto</NavLink></li>
-          <li><CartIcon /></li>
+          <li><CartIcon count={cartItems?.length || 0} /></li>
         </ul>
       </div>
-
     </NavbarContainer>
   );
 };

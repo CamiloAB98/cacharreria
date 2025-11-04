@@ -5,7 +5,7 @@ import ProductosDestacados from "../components/ProductosDestacados"
 const Home = () => {
     return (
         <div>
-            <SeccionBanner />
+            {/* <SeccionBanner /> */}
             <CategoriasSlide />
             <ProductosDestacados />
         </div>

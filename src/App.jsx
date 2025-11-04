@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import Productos from "./pages/Productos";
 import Contacto from "./pages/Contacto";
 import Carrito from "./pages/Carrito";
+import Terminos from "./pages/Terminos";
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
           <Route path="/productos" element={<Productos />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/carrito" element={<Carrito />} />
+          <Route path="/terminos" element={<Terminos />} />
         </Routes>
       </main>
       {/* Pie de página */}
