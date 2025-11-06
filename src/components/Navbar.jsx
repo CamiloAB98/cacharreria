@@ -12,7 +12,7 @@ const NavbarContainer = styled.nav`
   width: 100%;
   z-index: 1000;
 
-  background-image: url("/assets/images/banner2.jpg");
+  background-image: url("/assets/images/banner.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -9,10 +9,10 @@ const focusRing = ({ theme }) => css`${theme.focusRing(theme.colors.accent)}`;
 
 const Section = styled.section`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0;
+  /* border-radius: ${({ theme }) => theme.radius.lg} ${({ theme }) => theme.radius.lg} 0 0; */
   transition: ${({ theme }) => theme.transition};
-  margin: ${({ theme }) => `${theme.spacing(12)} 0`};  
-  padding: ${({ theme }) => `${theme.spacing(8)} 0`};   
+  /* margin: ${({ theme }) => `${theme.spacing(12)} 0`};   */
+  padding: ${({ theme }) => `${theme.spacing(12)} 0`};   
   text-align: center;
 `;
 

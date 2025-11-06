@@ -8,8 +8,6 @@ import GlobalStyles from "./styles/GlobalStyles.jsx";
 import theme from "./styles/theme";
 
 import "uikit/dist/css/uikit.min.css";
-
-// IMPORTA AQUI EL PROVIDER DEL CARRITO
 import { CartProvider } from "./context/CartContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,7 +15,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ThemeProvider theme={theme}>
             <GlobalStyles />
             <BrowserRouter>
-                {/* Envuelve la app con el CartProvider */}
                 <CartProvider>
                     <App />
                 </CartProvider>
