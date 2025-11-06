@@ -12,13 +12,11 @@ const NavbarContainer = styled.nav`
   width: 100%;
   z-index: 1000;
 
-  /* Fondo del antiguo banner */
-  background-image: url("/assets/images/banner2.jpg"); /* Ajusta esta ruta */
+  background-image: url("/assets/images/banner2.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
-  /* Overlay */
   &::before {
     content: "";
     position: absolute;
@@ -27,21 +25,25 @@ const NavbarContainer = styled.nav`
     z-index: 0;
   }
 
-  /* Asegura que el contenido esté encima del overlay */
   > div {
     position: relative;
     z-index: 1;
   }
 
   box-shadow: ${({ theme }) => theme.shadows.card};
-  min-height: ${({ theme }) => theme.spacing(14)};
-  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(8)}`};
+  min-height: ${({ theme }) => theme.spacing(20)};
+  padding: ${({ theme }) => `${theme.spacing(4)} ${theme.spacing(10)}`};
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   transition: ${({ theme }) => theme.transition};
 
   .uk-navbar-item.uk-logo {
     font-weight: 700;
-    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
-    color: #fff !important;
+    font-size: clamp(2rem, 4vw, 2.4rem);
+    color: #fff ;
   }
 
   .uk-navbar-nav > li > a {
@@ -51,12 +53,7 @@ const NavbarContainer = styled.nav`
     font-weight: 500;
     padding: ${({ theme }) => theme.spacing(4)};
     border-bottom: 2px solid transparent;
-    transition: ${({ theme }) => theme.transition};
     line-height: 1;
-  }
-
-  .uk-navbar-nav > li > a:hover {
-    color: ${({ theme }) => theme.colors.primary} !important;
   }
 
   .uk-navbar-nav > li > a[aria-current="page"] {
@@ -66,7 +63,9 @@ const NavbarContainer = styled.nav`
 
   @media (max-width: 768px) {
     padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(6)}`};
-    min-height: ${({ theme }) => theme.spacing(12)};
+    min-height: ${({ theme }) => theme.spacing(14)};
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing(2)};
   }
 `;
 
