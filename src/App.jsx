@@ -18,6 +18,8 @@ import Terminos from "./pages/Terminos";
 import Ayudapqr from "./pages/Ayudapqr";
 import TrabajaConNosotros from "./pages/TrabajaConNosotros";
 import AcercaDe from "./pages/AcercaDe";
+import CheckOut from "./pages/CheckOut";
+import CompraFinalizada from "./pages/CompraFinalizada"
 
 function App() {
   const location = useLocation();
@@ -42,6 +44,8 @@ function App() {
           <Route path="/ayudapqr" element={<Ayudapqr />} />
           <Route path="/trabaja-con-nosotros" element={<TrabajaConNosotros />} />
           <Route path="/acerca-de" element={<AcercaDe />} />
+          <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/compra-finalizada" element={<CompraFinalizada />} />
         </Routes>
       </main>
       {/* Pie de página */}
