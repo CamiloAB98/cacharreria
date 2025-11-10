@@ -4,8 +4,7 @@ import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import { useCart } from "../../context/CartContext";
 import UIkit from "uikit";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Panel = styled.div`
   min-width: 320px;
@@ -71,17 +70,23 @@ const Footer = styled.div`
   gap: ${({ theme }) => theme.spacing(2)};
 `;
 
-const BtnPrimary = styled.a`
+const BtnPrimary = styled.button`
   display: inline-block;
+  width: 100%;
   padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(3)}`};
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.text};
-  text-decoration: none !important;
+  border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   font-weight: 700;
+  font-size: 1rem;
   text-align: center;
+  cursor: pointer;
 
-  &:hover { background: ${({ theme }) => theme.colors.accent}; color: ${({ theme }) => theme.colors.textLight}; }
+  &:hover {
+    background: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.textLight};
+  }
 `;
 
 const BtnGhost = styled(Link)`
@@ -93,27 +98,32 @@ const BtnGhost = styled(Link)`
   color: ${({ theme }) => theme.colors.text};
   text-align: center;
 
-  &:hover { background: ${({ theme }) => theme.colors.muted}; }
+  &:hover {
+    background: ${({ theme }) => theme.colors.muted};
+  }
 `;
 
 export default function MiniCart({ onClose }) {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { cart, increaseQty, decreaseQty, removeFromCart, getSubtotal } = useCart();
 
-  const subtotal = getSubtotal ?? 0;
+  const subtotal = typeof getSubtotal === "function" ? getSubtotal() : 0;
 
-  // WhatsApp link: same number used elsewhere
-  const whatsappFull = "573108134117";
-  const buildWaMessage = () => {
-    if (!cart || cart.length === 0) return "Hola, quiero hacer una compra";
-    let lines = [`Hola, quiero finalizar esta compra en Cacharrería Bastidas:`, ""];
-    cart.forEach((it, idx) => {
-      lines.push(`${idx + 1}) ${it.nombre} x ${it.cantidad} - $${(it.precio * it.cantidad).toLocaleString("es-CO")}`);
+
+  const handleCheckout = () => {
+  if (!cart || cart.length === 0) {
+    UIkit.notification({
+      message: "Tu carrito está vacío 🛒",
+      status: "warning",
+      pos: "top-center",
     });
-    lines.push("", `Subtotal: $${subtotal.toLocaleString("es-CO")}`);
-    return encodeURIComponent(lines.join("\n"));
-  };
-  const waHref = `https://wa.me/${whatsappFull}?text=${buildWaMessage()}`;
+    return;
+  }
+
+  UIkit.offcanvas("#mini-cart")?.hide(); // Cierra el panel
+  navigate("/checkout"); // Redirige al checkout
+};
 
   return (
     <Panel role="dialog" aria-label="Resumen rápido del carrito">
@@ -130,18 +140,43 @@ export default function MiniCart({ onClose }) {
                 <div style={{ flex: 1 }}>
                   <Title>{it.nombre}</Title>
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-                    <SmallMuted>${(it.precio * it.cantidad).toLocaleString("es-CO")}</SmallMuted>
+                    <SmallMuted>
+                      ${(it.precio * it.cantidad).toLocaleString("es-CO")}
+                    </SmallMuted>
 
                     <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                       <QtyBox>
-                        <QtyBtn aria-label={`Disminuir ${it.nombre}`} onClick={() => decreaseQty(it.id)}>-</QtyBtn>
-                        <div style={{ minWidth: 28, textAlign: "center", fontWeight: 700 }}>{it.cantidad}</div>
-                        <QtyBtn aria-label={`Aumentar ${it.nombre}`} onClick={() => increaseQty(it.id)}>+</QtyBtn>
+                        <QtyBtn
+                          aria-label={`Disminuir ${it.nombre}`}
+                          onClick={() => decreaseQty(it.id)}
+                        >
+                          -
+                        </QtyBtn>
+                        <div
+                          style={{
+                            minWidth: 28,
+                            textAlign: "center",
+                            fontWeight: 700,
+                          }}
+                        >
+                          {it.cantidad}
+                        </div>
+                        <QtyBtn
+                          aria-label={`Aumentar ${it.nombre}`}
+                          onClick={() => increaseQty(it.id)}
+                        >
+                          +
+                        </QtyBtn>
                       </QtyBox>
 
                       <button
                         onClick={() => removeFromCart(it.id)}
-                        style={{ border: "none", background: "transparent", color: theme.colors.danger || "#e74c3c", cursor: "pointer" }}
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          color: theme.colors.danger || "#e74c3c",
+                          cursor: "pointer",
+                        }}
                         aria-label={`Eliminar ${it.nombre}`}
                       >
                         Eliminar
@@ -154,13 +189,21 @@ export default function MiniCart({ onClose }) {
           </div>
 
           <Footer>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <SmallMuted>Subtotal</SmallMuted>
-              <div style={{ fontWeight: 800 }}>${subtotal.toLocaleString("es-CO")}</div>
+              <div style={{ fontWeight: 800 }}>
+                ${subtotal.toLocaleString("es-CO")}
+              </div>
             </div>
 
-            <BtnPrimary href={waHref} target="_blank" rel="noopener noreferrer">
-              Finalizar por WhatsApp
+            <BtnPrimary onClick={handleCheckout}>
+              Finalizar compra
             </BtnPrimary>
 
             <BtnGhost to="/carrito" onClick={onClose}>

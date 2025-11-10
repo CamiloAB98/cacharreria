@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import { useCart } from "../../context/CartContext";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Card = styled.div`
   ${({ theme }) => theme.cardBase(theme)}
@@ -15,10 +15,21 @@ const Card = styled.div`
   gap: ${({ theme }) => theme.spacing(3)};
 `;
 
+const Title = styled.h3`
+  margin: 0;
+`;
+
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const Divider = styled.hr`
+  border: none;
+  height: 1px;
+  background: ${({ theme }) => theme.colors.background};
+  margin: 0;
 `;
 
 const Total = styled.div`
@@ -26,7 +37,14 @@ const Total = styled.div`
   font-size: 1.25rem;
 `;
 
-const CheckoutButton = styled.a`
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: ${({ theme }) => theme.spacing(2)};
+`;
+
+const CheckoutButton = styled.button`
   display: inline-block;
   text-align: center;
   padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(4)}`};
@@ -34,17 +52,13 @@ const CheckoutButton = styled.a`
   color: ${({ theme }) => theme.colors.text};
   border-radius: ${({ theme }) => theme.radius.md};
   font-weight: 800;
-  text-decoration: none !important; 
+  border: none;
+  cursor: pointer;
   transition: ${({ theme }) => theme.transition};
 
   &:hover {
     background: ${({ theme }) => theme.colors.accent};
     color: ${({ theme }) => theme.colors.textLight};
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: ${({ theme }) => theme.focusRing(theme.colors.primary)};
   }
 `;
 
@@ -64,46 +78,54 @@ const DangerButton = styled.button`
     background: ${({ theme }) => (theme.colors.danger || "#e74c3c")}11;
     color: ${({ theme }) => theme.colors.danger || "#e74c3c"};
   }
-
-  &:focus {
-    outline: none;
-    box-shadow: ${({ theme }) => theme.focusRing(theme.colors.danger || "#e74c3c")};
-  }
 `;
 
-export default function CartSummary({ waHref }) {
-    const theme = useTheme();
-    const { getSubtotal, clearCart } = useCart();
-    const subtotal = getSubtotal;
+export default function CartSummary({ onCheckout }) {
+  const { getSubtotal, clearCart } = useCart();
+  const subtotal =
+    typeof getSubtotal === "function" ? getSubtotal() : getSubtotal;
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    return (
-        <Card>
-            <h3 style={{ margin: 0 }}>Resumen de compra</h3>
+  // Detecta si estamos en la página de checkout
+  const isCheckoutPage = location.pathname === "/checkout";
 
-            <Row>
-                <div>Subtotal</div>
-                <div>${subtotal.toLocaleString("es-CO")}</div>
-            </Row>
+  // Función segura: si no se pasa onCheckout, navegamos (fallback)
+  const handleCheckout =
+    typeof onCheckout === "function"
+      ? onCheckout
+      : () => navigate("/checkout");
 
-            <Row>
-                <div>Envío</div>
-                <div>A convenir</div>
-            </Row>
+  return (
+    <Card>
+      <Title>Resumen de compra</Title>
 
-            <hr style={{ border: "none", height: 1, background: theme.colors.background, margin: 0 }} />
+      <Row>
+        <div>Subtotal</div>
+        <div>${subtotal.toLocaleString("es-CO")}</div>
+      </Row>
 
-            <Row>
-                <div>Total</div>
-                <Total>${subtotal.toLocaleString("es-CO")}</Total>
-            </Row>
+      <Row>
+        <div>Envío</div>
+        <div>A convenir</div>
+      </Row>
 
-            <div style={{ display: "flex", gap: 12, marginTop: theme.spacing(2), flexDirection: "column" }}>
-                <CheckoutButton href={waHref} target="_blank" rel="noopener noreferrer">
-                    Finalizar compra por WhatsApp
-                </CheckoutButton>
+      <Divider />
 
-                <DangerButton onClick={() => clearCart()}>Vaciar carrito</DangerButton>
-            </div>
-        </Card>
-    );
+      <Row>
+        <div>Total</div>
+        <Total>${subtotal.toLocaleString("es-CO")}</Total>
+      </Row>
+
+      {/* Solo mostrar botones si NO estamos en la página de checkout */}
+      {!isCheckoutPage && (
+        <ButtonsContainer>
+          <CheckoutButton onClick={handleCheckout}>
+            Finalizar compra
+          </CheckoutButton>
+          <DangerButton onClick={() => clearCart()}>Vaciar carrito</DangerButton>
+        </ButtonsContainer>
+      )}
+    </Card>
+  );
 }

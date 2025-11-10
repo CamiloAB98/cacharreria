@@ -55,10 +55,10 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  background: ${({ theme, variant }) =>
-        variant === "confirm" ? theme.colors.success : theme.colors.danger};
-  color: ${({ theme }) => theme.colors.textLight};
-  border: none;
+background: ${({ theme, variant }) =>variant === "confirm" ? theme.colors.success : theme.colors.danger};
+background: ${({ theme, variant }) =>variant === "cancel" ? theme.colors.secondary : theme.colors.danger};
+color: ${({ theme }) => theme.colors.textLight};
+border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   padding: ${({ theme }) => `${theme.spacing(1.5)} ${theme.spacing(4)}`};
   font-weight: 600;

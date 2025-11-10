@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 
 /* ---------- Estilos base ---------- */
-
 const SummaryBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,7 +25,7 @@ const Item = styled.li`
   background: ${({ theme }) => theme.colors.surface};
   padding: ${({ theme }) => theme.spacing(2)};
   border-radius: ${({ theme }) => theme.radius.md};
-  box-shadow: var(--shadow-sm);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 const ItemInfo = styled.div`
@@ -49,8 +48,9 @@ const ItemText = styled.div`
   gap: 4px;
 
   span {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: ${({ theme }) => theme.colors.textDark};
+    font-weight: 600;
   }
 
   small {
@@ -60,8 +60,8 @@ const ItemText = styled.div`
 `;
 
 const Price = styled.span`
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.primary};
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const TotalBox = styled.div`
@@ -86,79 +86,77 @@ const TotalRow = styled(Row)`
 `;
 
 /* ---------- Componente principal ---------- */
+const OrderSummary = ({ cartItems = [] }) => {
+  const theme = useTheme();
+  const [totals, setTotals] = useState({
+    subtotal: 0,
+    envio: 0,
+    total: 0,
+  });
 
-const OrderSummary = ({ formData }) => {
-    const theme = useTheme();
-    const [cartItems, setCartItems] = useState([]);
-    const [totals, setTotals] = useState({
-        subtotal: 0,
-        envio: 0,
-        total: 0,
-    });
-
-    useEffect(() => {
-        // Simula obtener el carrito del localStorage o un hook global
-        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        setCartItems(carrito);
-
-        const subtotalCalc = carrito.reduce(
-            (sum, item) => sum + item.precio * item.cantidad,
-            0
-        );
-        const envioCalc = subtotalCalc > 100000 ? 0 : 8000;
-        const totalCalc = subtotalCalc + envioCalc;
-
-        setTotals({
-            subtotal: subtotalCalc,
-            envio: envioCalc,
-            total: totalCalc,
-        });
-    }, []);
-
-    return (
-        <SummaryBox>
-            <ItemList>
-                {cartItems.length === 0 ? (
-                    <p className="uk-text-center uk-text-muted uk-margin-small">
-                        Tu carrito está vacío.
-                    </p>
-                ) : (
-                    cartItems.map((item, idx) => (
-                        <Item key={idx}>
-                            <ItemInfo>
-                                <ItemImage src={item.imagen || "/placeholder.jpg"} alt={item.nombre} />
-                                <ItemText>
-                                    <span>{item.nombre}</span>
-                                    <small>
-                                        {item.cantidad} × ${item.precio.toLocaleString("es-CO")}
-                                    </small>
-                                </ItemText>
-                            </ItemInfo>
-                            <Price>${(item.precio * item.cantidad).toLocaleString("es-CO")}</Price>
-                        </Item>
-                    ))
-                )}
-            </ItemList>
-
-            {/* --- Totales --- */}
-            <TotalBox>
-                <Row>
-                    <span>Subtotal</span>
-                    <span>${totals.subtotal.toLocaleString("es-CO")}</span>
-                </Row>
-                <Row>
-                    <span>Envío</span>
-                    <span>
-                        {totals.envio === 0 ? "Gratis" : `$${totals.envio.toLocaleString("es-CO")}`}
-                    </span>
-                </Row>
-                <TotalRow>
-                    <span>Total</span>
-                    <span>${totals.total.toLocaleString("es-CO")}</span>
-                </TotalRow>
-            </TotalBox>
-        </SummaryBox>
+  useEffect(() => {
+    // Calcula totales en base a la prop recibida
+    const subtotalCalc = (cartItems || []).reduce(
+      (sum, item) => sum + (Number(item.precio || item.price || 0) * Number(item.cantidad || item.quantity || 1)),
+      0
     );
+    const envioCalc = subtotalCalc > 100000 ? 0 : 8000;
+    const totalCalc = subtotalCalc + envioCalc;
+
+    setTotals({
+      subtotal: subtotalCalc,
+      envio: envioCalc,
+      total: totalCalc,
+    });
+  }, [cartItems]);
+
+  return (
+    <SummaryBox>
+      <ItemList>
+        {(!cartItems || cartItems.length === 0) ? (
+          <p className="uk-text-center uk-text-muted uk-margin-small">
+            Tu carrito está vacío.
+          </p>
+        ) : (
+          cartItems.map((item, idx) => (
+            <Item key={idx}>
+              <ItemInfo>
+                <ItemImage
+                  src={item.imagen || item.image || "/assets/images/placeholder.jpg"}
+                  alt={item.nombre || item.name || "Producto"}
+                />
+                <ItemText>
+                  <span>{item.nombre || item.name}</span>
+                  <small>
+                    {item.cantidad || item.quantity} × ${Number(item.precio || item.price).toLocaleString("es-CO")}
+                  </small>
+                </ItemText>
+              </ItemInfo>
+              <Price>
+                ${((Number(item.precio || item.price) || 0) * (Number(item.cantidad || item.quantity) || 1)).toLocaleString("es-CO")}
+              </Price>
+            </Item>
+          ))
+        )}
+      </ItemList>
+
+      {/* --- Totales --- */}
+      <TotalBox>
+        <Row>
+          <span>Subtotal</span>
+          <span>${totals.subtotal.toLocaleString("es-CO")}</span>
+        </Row>
+        <Row>
+          <span>Envío</span>
+          <span>{totals.envio === 0 ? "Gratis" : `$${totals.envio.toLocaleString("es-CO")}`}</span>
+        </Row>
+        <TotalRow>
+          <span>Total</span>
+          <span>${totals.total.toLocaleString("es-CO")}</span>
+        </TotalRow>
+      </TotalBox>
+    </SummaryBox>
+  );
 };
 
 export default OrderSummary;
