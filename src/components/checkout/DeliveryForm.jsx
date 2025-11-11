@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
-import ciudades from "../../data/ciudades"; // ✅ Importamos lista de ciudades
+import ciudades from "../../data/ciudades"; //
 
 /* ---------- Estilos base ---------- */
 const Form = styled.form`

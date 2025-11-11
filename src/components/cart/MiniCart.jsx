@@ -108,7 +108,7 @@ export default function MiniCart({ onClose }) {
   const navigate = useNavigate();
   const { cart, increaseQty, decreaseQty, removeFromCart, getSubtotal } = useCart();
 
-  const subtotal = typeof getSubtotal === "function" ? getSubtotal() : 0;
+  const subtotal = typeof getSubtotal === "function" ? getSubtotal() : getSubtotal || 0;
 
 
   const handleCheckout = () => {
