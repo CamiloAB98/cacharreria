@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // ✅ Importar el contexto global
+import { useCart } from "../context/CartContext"; 
 import DeliveryForm from "../components/checkout/DeliveryForm";
 import OrderSummary from "../components/checkout/OrderSummary";
 import ConfirmationModal from "../components/checkout/ConfirmationModal";

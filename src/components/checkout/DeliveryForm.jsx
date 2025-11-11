@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
+import ciudades from "../../data/ciudades"; // ✅ Importamos lista de ciudades
 
 /* ---------- Estilos base ---------- */
 const Form = styled.form`
@@ -66,7 +67,7 @@ const DeliveryForm = ({ onChange }) => {
         telefono: "",
         direccion: "",
         ciudad: "",
-        metodoPago: "contraentrega",
+        metodoPago: "Contraentrega",
     });
 
     const handleChange = (e) => {
@@ -76,7 +77,7 @@ const DeliveryForm = ({ onChange }) => {
     };
 
     return (
-        <Form data-uk-form-custom="target: true">
+        <Form>
             <FieldGroup>
                 <Label htmlFor="nombre">Nombre completo</Label>
                 <Input
@@ -86,7 +87,6 @@ const DeliveryForm = ({ onChange }) => {
                     placeholder="Ej: Camilo Bravo"
                     value={form.nombre}
                     onChange={handleChange}
-                    className="uk-input"
                     required
                 />
             </FieldGroup>
@@ -101,7 +101,6 @@ const DeliveryForm = ({ onChange }) => {
                         placeholder="Ej: 3123456789"
                         value={form.telefono}
                         onChange={handleChange}
-                        className="uk-input"
                         required
                     />
                 </FieldGroup>
@@ -113,15 +112,14 @@ const DeliveryForm = ({ onChange }) => {
                         name="ciudad"
                         value={form.ciudad}
                         onChange={handleChange}
-                        className="uk-select"
                         required
                     >
                         <option value="">Selecciona tu ciudad</option>
-                        <option value="Bogotá">Bogotá</option>
-                        <option value="Medellín">Medellín</option>
-                        <option value="Cali">Cali</option>
-                        <option value="Barranquilla">Barranquilla</option>
-                        <option value="Otra">Otra</option>
+                        {ciudades.map((c) => (
+                            <option key={c.id} value={c.nombre}>
+                                {c.nombre}
+                            </option>
+                        ))}
                     </Select>
                 </FieldGroup>
             </Row>
@@ -135,24 +133,18 @@ const DeliveryForm = ({ onChange }) => {
                     placeholder="Ej: Calle 123 #45-67"
                     value={form.direccion}
                     onChange={handleChange}
-                    className="uk-input"
                     required
                 />
             </FieldGroup>
 
             <FieldGroup>
-                <Label htmlFor="metodoPago">Método de pago</Label>
-                <Select
-                    id="metodoPago"
+                <Label>Método de pago</Label>
+                <Input
+                    type="text"
                     name="metodoPago"
                     value={form.metodoPago}
-                    onChange={handleChange}
-                    className="uk-select"
-                    required
-                >
-                    <option value="contraentrega">Pago contraentrega</option>
-                    <option value="transferencia">Transferencia bancaria</option>
-                </Select>
+                    readOnly
+                />
             </FieldGroup>
         </Form>
     );

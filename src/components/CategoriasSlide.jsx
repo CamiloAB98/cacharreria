@@ -128,10 +128,11 @@ const CTA = styled(Link)`
   padding: ${({ theme }) => `${theme.spacing(1.5)} ${theme.spacing(3)}`};
   border-radius: ${({ theme }) => theme.radius.md};
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: none !important;;
   transition: ${({ theme }) => theme.transition};
   min-width: 120px;
   text-align: center;
+
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.success};
